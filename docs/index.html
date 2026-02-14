@@ -1,102 +1,62 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8">
+  <title>ScrapNet - Waste Classification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f8;
+      text-align: center;
+    }
+    header {
+      background: #1f2937;
+      color: white;
+      padding: 30px 20px;
+    }
+    section {
+      padding: 40px 20px;
+    }
+    .button {
+      display: inline-block;
+      padding: 12px 25px;
+      margin-top: 20px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+    .button:hover {
+      background: #1e40af;
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!doctype html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="utf-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width,initial-scale=1" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;ScrapNet — Waste Classification&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;max-width:980px;margin:40px auto;padding:0 16px;line-height:1.5}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.tag{display:inline-block;padding:4px 10px;border-radius:999px;background:#eef7ff;margin-right:8px}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>h1{margin:0 0 6px}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.grid{display:grid;grid-template-columns:1fr;gap:18px}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>@media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>img{width:100%;border-radius:14px;border:1px solid #eee}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.card{padding:16px;border:1px solid #eee;border-radius:16px}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>code,pre{background:#f6f8fa;padding:2px 6px;border-radius:6px}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>pre{padding:12px;overflow:auto}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>a{color:#0969da;text-decoration:none}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>a:hover{text-decoration:underline}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tag"&gt;Computer Vision&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tag"&gt;PyTorch + EfficientNet-B0&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="tag"&gt;Streamlit Demo&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;ScrapNet — Waste Classification&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>This project classifies an input image into one of 7 waste categories:</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;b&gt;cardboard, compost, glass, metal, paper, plastic, trash&lt;/b&gt;.</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Quick Results&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;li&gt;Model: EfficientNet-B0 (transfer learning)&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;li&gt;Metrics: accuracy + per-class precision/recall/F1&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;li&gt;Artifacts saved: training curves + confusion matrices + model weights&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;Confusion Matrix (Counts)&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;img src="../artifacts/confusion_matrix_counts.png" alt="Confusion matrix counts"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;Confusion Matrix (Normalized)&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;img src="../artifacts/confusion_matrix_normalized.png" alt="Confusion matrix normalized"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;Loss Curve&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;img src="../artifacts/loss_curve.png" alt="Loss curve"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;Accuracy Curve&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;img src="../artifacts/accuracy_curve.png" alt="Accuracy curve"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;Per-Class F1&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;img src="../artifacts/f1_scores.png" alt="F1 scores"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card" style="margin-top:18px"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;How to Run the Demo (Streamlit)&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;pre&gt;</p>
-<p class="p1">pip install -r requirements.txt</p>
-<p class="p1">streamlit run app.py</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/pre&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>Upload an image → ScrapNet predicts the waste category + confidence.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card" style="margin-top:18px"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Repository&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>Code + artifacts are available in this GitHub repo.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p style="margin-top:24px;color:#666"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>© ScrapNet Project — PBL Submission</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/p&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+<header>
+  <h1>♻ ScrapNet</h1>
+  <p>Waste Classification using EfficientNet-B0</p>
+</header>
+
+<section>
+  <h2>Project Overview</h2>
+  <p>
+    ScrapNet is a deep learning model trained to classify waste images into categories
+    using transfer learning with EfficientNet-B0.
+  </p>
+
+  <h3>Live Model Demo</h3>
+  <p>
+    Click below to test the deployed Streamlit app.
+  </p>
+
+  <a class="button" href="https://bhavya-7-11.github.io/Scrapnet/" target="_blank">
+    Launch Live Demo
+  </a>
+</section>
+
 </body>
 </html>
