@@ -4,15 +4,16 @@ import numpy as np
 
 from predict import load_model, predict_image
 
-st.set_page_config(page_title="Waste Classifier", page_icon="♻️")
-st.title("♻️ Waste Classification Demo")
-st.write("Upload an image and the model will predict the waste category.")
+st.set_page_config(page_title="Waste Classifier", page_icon="♻️", layout="centered")
 
 @st.cache_resource
 def get_model():
     return load_model(device="cpu")
 
 model, classes = get_model()
+
+st.title("♻️ Waste Classification Demo")
+st.write("Upload an image and the model will predict the waste category.")
 
 uploaded = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png", "webp"])
 
