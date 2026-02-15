@@ -19,7 +19,7 @@ uploaded = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png", "webp
 
 if uploaded:
     img = Image.open(uploaded).convert("RGB")
-    st.image(img, caption="Uploaded image", use_container_width=True)
+    st.image(img, caption="Uploaded image")
 
     label, conf, probs = predict_image(model, classes, img, device="cpu")
 
