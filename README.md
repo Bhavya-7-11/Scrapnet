@@ -1,4 +1,4 @@
-# ♻️ ScrapNet – AI Waste Classification System
+# ♻️ ScrapNet - AI Waste Classification System
 
 ScrapNet is a deep learning–powered waste classification system built using 
 **EfficientNet-B0** and **PyTorch**. The model predicts waste categories from images 
@@ -6,7 +6,7 @@ to support intelligent waste management and sustainability initiatives.
 
 ---
 
-## 🌍 Live Access
+## Live Access
 
 🔗 **Streamlit App:**  
 https://scrapnet-5zr4nm9mgrpdptppmejrtm.streamlit.app  
@@ -16,7 +16,7 @@ https://bhavya-7-11.github.io/Scrapnet/
 
 ---
 
-## 🧠 Model Overview
+## Model Overview
 
 - **Architecture:** EfficientNet-B0  
 - **Framework:** PyTorch  
@@ -29,7 +29,7 @@ The classifier head was modified to match the number of waste categories and fin
 
 ---
 
-## 📊 Model Performance
+## Model Performance
 
 The repository includes:
 
@@ -41,7 +41,7 @@ Performance artifacts are stored in the `/artifacts` directory.
 
 ---
 
-## 🧪 Run Locally
+## Run Locally
 
 ### 1️⃣ Clone the repository
 
