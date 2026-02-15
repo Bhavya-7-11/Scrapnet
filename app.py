@@ -5,71 +5,71 @@ import pandas as pd
 
 from predict import load_model, predict_image
 
-# ---------------- Page Setup ----------------
+# ---------------- Page Config ----------------
 st.set_page_config(
-    page_title="ScrapNet • Waste Classifier",
-    page_icon="♻️",
+    page_title="ScrapNet • Eco Waste Classifier",
+    page_icon="🌿",
     layout="centered",
-    initial_sidebar_state="expanded",
 )
 
-# ---------------- Styling (CSS) ----------------
-st.markdown(
-    """
-    <style>
-      .main { padding-top: 1.2rem; }
-      .hero {
-        text-align:center;
-        padding: 1.2rem 1.2rem 0.4rem 1.2rem;
-        border-radius: 18px;
-        background: linear-gradient(135deg, rgba(25,135,84,0.15), rgba(13,110,253,0.10));
-        border: 1px solid rgba(255,255,255,0.08);
-      }
-      .hero h1 { margin-bottom: 0.2rem; }
-      .subtle { opacity: 0.85; }
-      .card {
-        padding: 1rem 1.1rem;
-        border-radius: 16px;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
-      }
-      .small { font-size: 0.92rem; opacity: 0.85; }
-      .badge {
-        display:inline-block;
-        padding: 0.25rem 0.55rem;
-        border-radius: 999px;
-        background: rgba(13,110,253,0.18);
-        border: 1px solid rgba(13,110,253,0.35);
-        font-size: 0.85rem;
-      }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+# ---------------- ECO STYLING ----------------
+st.markdown("""
+<style>
 
-# ---------------- Sidebar ----------------
-st.sidebar.markdown("## ♻️ ScrapNet")
-st.sidebar.markdown(
-    """
-**Waste Classification using EfficientNet-B0**
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
+}
 
-**How to use**
-1. Upload a JPG/PNG/WEBP  
-2. Wait ~1–2 seconds  
-3. Get class + confidence + Top-3
+.main {
+    padding-top: 1rem;
+}
 
-**Tips**
-- Try clear objects (plastic bottle, paper, etc.)
-- If you’re on mobile, use a smaller image (<1MB)
-"""
-)
+.hero {
+    text-align:center;
+    padding: 2rem 1rem;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #0f5132, #198754);
+    color: white;
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.15);
+}
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### ⚙️ Settings")
-topk_n = st.sidebar.slider("Show Top-K predictions", 3, 5, 3)
-show_probs = st.sidebar.toggle("Show probability table", value=False)
+.hero h1 {
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+}
 
-# ---------------- Load model once ----------------
+.sub {
+    opacity: 0.9;
+}
+
+.card {
+    background: rgba(25, 135, 84, 0.06);
+    padding: 1.2rem;
+    border-radius: 18px;
+    border: 1px solid rgba(25,135,84,0.25);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}
+
+.badge {
+    display:inline-block;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: #d1e7dd;
+    color: #0f5132;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.metric-green {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #198754;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------- Load Model ----------------
 @st.cache_resource
 def get_model():
     return load_model(device="cpu")
@@ -77,30 +77,25 @@ def get_model():
 model, classes = get_model()
 
 # ---------------- Hero ----------------
-st.markdown(
-    """
-    <div class="hero">
-      <h1>♻️ ScrapNet</h1>
-      <div class="subtle">Upload an image and the model predicts the waste category.</div>
-      <div style="margin-top:0.6rem;">
-        <span class="badge">EfficientNet-B0 • Transfer Learning</span>
-      </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown("""
+<div class="hero">
+    <h1>🌿 ScrapNet</h1>
+    <div class="sub">AI-Powered Waste Classification using EfficientNet-B0</div>
+    <br>
+    <span class="badge">Sustainable AI • Transfer Learning</span>
+</div>
+""", unsafe_allow_html=True)
 
 st.write("")
 
-# ---------------- Upload Card ----------------
+# ---------------- Upload Section ----------------
 st.markdown('<div class="card">', unsafe_allow_html=True)
-st.markdown("### 📤 Upload an image")
+st.markdown("### 📤 Upload Waste Image")
 uploaded = st.file_uploader(
-    "Supported: JPG, JPEG, PNG, WEBP",
+    "Supported formats: JPG, JPEG, PNG, WEBP",
     type=["jpg", "jpeg", "png", "webp"],
-    label_visibility="collapsed",
+    label_visibility="collapsed"
 )
-st.markdown('<div class="small">Tip: Use a clear object image for best results.</div>', unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.write("")
@@ -111,42 +106,40 @@ if uploaded:
         img = Image.open(uploaded).convert("RGB")
 
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 🖼️ Preview")
-        st.image(img, caption="Uploaded image", use_container_width=True)
+        st.image(img, caption="Uploaded Image", use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
         label, conf, probs = predict_image(model, classes, img, device="cpu")
 
         st.write("")
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### ✅ Prediction")
+        st.markdown("### ♻️ Prediction Result")
 
-        c1, c2 = st.columns(2)
-        c1.metric("Predicted Class", label)
-        c2.metric("Confidence", f"{conf*100:.2f}%")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(f"<div class='metric-green'>Class:</div>", unsafe_allow_html=True)
+            st.markdown(f"## {label}")
 
-        # Top-K
+        with col2:
+            st.markdown(f"<div class='metric-green'>Confidence:</div>", unsafe_allow_html=True)
+            st.markdown(f"## {conf*100:.2f}%")
+
         probs = np.array(probs)
-        k = min(topk_n, len(classes))
-        topk_idx = np.argsort(probs)[::-1][:k]
+        top_idx = np.argsort(probs)[::-1][:3]
 
         df = pd.DataFrame({
-            "Class": [classes[i] for i in topk_idx],
-            "Probability": [float(probs[i]) for i in topk_idx],
+            "Class": [classes[i] for i in top_idx],
+            "Probability": [float(probs[i]) for i in top_idx]
         })
 
         st.write("")
-        st.markdown("#### 📊 Top predictions")
+        st.markdown("### 🌱 Top 3 Predictions")
         st.bar_chart(df.set_index("Class")["Probability"])
-
-        if show_probs:
-            st.markdown("#### 🧾 Probability table")
-            st.dataframe(df, use_container_width=True)
 
         st.markdown("</div>", unsafe_allow_html=True)
 
     except Exception:
-        st.error("Couldn’t process that image. Try a different file (smaller/clearer).")
+        st.error("⚠️ Could not process image. Try a clearer or smaller file.")
 
 else:
-    st.info("Upload an image to get a prediction.")
+    st.info("🌍 Upload an image to see AI classify the waste category.")
