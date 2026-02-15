@@ -1,201 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PBL Presentation | 2026</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { background-color: #020617; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-text { background: linear-gradient(90deg, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        /* TIMER UI - FIXED CONTRAST */
-        #timerContainer { background: #ffffff; color: #020617; box-shadow: 0 10px 40px rgba(0,0,0,0.8); border: 3px solid #3b82f6; z-index: 1000; }
-        @keyframes flicker { 0%, 100% { background-color: #ffffff; } 50% { background-color: #fca5a5; } }
-        .timer-warning { animation: flicker 1s infinite; border: 3px solid #ef4444 !important; color: #b91c1c !important; }
-        .timer-stop { background-color: #991b1b !important; color: #ffffff !important; border: 3px solid #f87171 !important; animation: none; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScrapNet | PBL Presentation 2026</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+    body { background-color: #020617; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+    .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .gradient-text { background: linear-gradient(90deg, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* TIMER */
+    #timerContainer { background: #ffffff; color: #020617; box-shadow: 0 10px 40px rgba(0,0,0,0.8); border: 3px solid #3b82f6; z-index: 1000; }
+    @keyframes flicker { 0%, 100% { background-color: #ffffff; } 50% { background-color: #fca5a5; } }
+    .timer-warning { animation: flicker 1s infinite; border: 3px solid #ef4444 !important; color: #b91c1c !important; }
+    .timer-stop { background-color: #991b1b !important; color: #ffffff !important; border: 3px solid #f87171 !important; animation: none; }
+
+    /* RESULTS */
+    .results-grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(180px,1fr));
+      gap:18px;
+      margin-top:20px;
+    }
+    .metric-card{
+      display:block;
+      padding:18px;
+      border-radius:16px;
+      border:1px solid rgba(100,255,150,.18);
+      background: rgba(255,255,255,.03);
+      text-decoration:none;
+      color:#eafff1;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .metric-card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(100,255,150,.35);
+    }
+    .metric-title{ font-weight:800; letter-spacing:.4px; }
+    .metric-sub{ opacity:.75; margin-top:6px; }
+
+    .metric-summary{
+      padding:18px;
+      border-radius:16px;
+      border:1px solid rgba(90,160,255,.22);
+      background: rgba(90,160,255,.06);
+    }
+    .summary-label{ opacity:.75; font-size:.9rem; }
+    .summary-value{ font-size:2rem; font-weight:900; color:#7CFF9B; margin-top:6px; }
+    .summary-note{ opacity:.75; margin-top:8px; line-height:1.4; }
+
+    .chip{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(124,255,155,.10);
+      border:1px solid rgba(124,255,155,.22);
+      color:#cfffdd;
+      text-decoration:none;
+      font-weight:700;
+      font-size:.9rem;
+    }
+    .chip:hover{ background: rgba(124,255,155,.16); }
+
+    .results-preview{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:22px;
+    }
+    .preview-card{
+      padding:16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.02);
+    }
+    .preview-title{ font-weight:800; margin-bottom:10px; opacity:.9; }
+    .preview-card img{ width:100%; border-radius:12px; }
+  </style>
 </head>
+
 <body onload="startTimer()">
 
-    <div id="timerContainer" class="fixed bottom-10 right-10 px-8 py-4 rounded-3xl flex items-center gap-4 transition-all">
-        <i class="fas fa-hourglass-start text-emerald-400 text-2xl" id="timerIcon"></i>
-        <span id="displayTime" class="text-4xl font-black font-mono tracking-tighter">00:00</span>
+  <!-- TIMER -->
+  <div id="timerContainer" class="fixed bottom-10 right-10 px-8 py-4 rounded-3xl flex items-center gap-4 transition-all">
+    <i class="fas fa-hourglass-start text-emerald-400 text-2xl" id="timerIcon"></i>
+    <span id="displayTime" class="text-4xl font-black font-mono tracking-tighter">00:00</span>
+  </div>
+
+  <!-- NAV -->
+  <nav class="fixed w-full z-50 glass border-b border-slate-800/50 px-8 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-4">
+      <div class="bg-white p-1 rounded flex items-center justify-center shadow-md" style="height: 48px; width: 48px;">
+        <img src="mujlogo.jpg" alt="MUJ" class="h-full w-auto object-contain" onerror="this.src='https://via.placeholder.com/50?text=MUJ'">
+      </div>
+      <div class="flex flex-col text-left">
+        <span class="text-xl font-black text-white leading-none uppercase tracking-tighter">PBL <span class="text-emerald-400 italic">2026</span></span>
+        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Dept. of Computer Science & Engineering</span>
+      </div>
     </div>
 
-    <nav class="fixed w-full z-50 glass border-b border-slate-800/50 px-8 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-4">
-            <div class="bg-white p-1 rounded flex items-center justify-center shadow-md" style="height: 48px; width: 48px;">
-                <img src="mujlogo.jpg" alt="MUJ" class="h-full w-auto object-contain" onerror="this.src='https://via.placeholder.com/50?text=MUJ'">
-            </div>
-            <div class="flex flex-col text-left">
-                <span class="text-xl font-black text-white leading-none uppercase tracking-tighter">PBL <span class="text-emerald-400 italic">2026</span></span>
-                <span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Dept. of Computer Science & Engineering</span>
-            </div>
+    <div class="hidden md:flex gap-8 text-[11px] uppercase tracking-widest font-bold opacity-70">
+      <a href="#problem" class="hover:text-emerald-300 transition">Problem</a>
+      <a href="#methodology" class="hover:text-emerald-300 transition">Methodology</a>
+      <a href="#results" class="hover:text-emerald-300 transition">Results</a>
+      <a href="#team" class="hover:text-emerald-300 transition">Team</a>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-6 pt-48 pb-32 space-y-32">
+
+    <!-- HERO -->
+    <section class="text-center">
+      <div class="inline-block px-4 py-1 border border-slate-800 rounded-full text-slate-500 text-[10px] font-mono mb-6 uppercase tracking-widest">
+        ID: 23FE10CSE00078
+      </div>
+
+      <h1 class="text-6xl md:text-7xl font-extrabold mb-8 uppercase leading-tight">
+        <span class="gradient-text">ScrapNet – Waste Classification System</span>
+      </h1>
+
+      <p class="text-slate-400 max-w-2xl mx-auto italic text-lg leading-relaxed border-l-2 border-emerald-400/30 pl-6 text-left">
+        <span class="text-slate-200 font-semibold">AI-powered waste image classification</span> using
+        <span class="text-slate-200 font-semibold">EfficientNet-B0</span> and
+        <span class="text-slate-200 font-semibold">PyTorch</span> to automate waste segregation for smarter recycling.
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://scrapnet-5zr4nm9mgrpdptppmejrtm.streamlit.app" target="_blank"
+           class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-lg transition">
+          <i class="fas fa-play"></i> Open Live Demo
+        </a>
+
+        <a href="https://github.com/Bhavya-7-11/Scrapnet" target="_blank"
+           class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border border-emerald-400/40 hover:border-emerald-300 text-slate-100 font-extrabold shadow-lg transition">
+          <i class="fab fa-github"></i> View GitHub Repo
+        </a>
+      </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section id="problem" class="grid md:grid-cols-2 gap-12 items-stretch">
+      <div class="glass p-10 rounded-[2.5rem] flex flex-col justify-center border-l-4 border-emerald-500">
+        <h2 class="text-3xl font-extrabold mb-6">Problem Statement</h2>
+        <p class="text-slate-400 leading-relaxed text-justify">
+          Manual waste segregation is slow and inconsistent, leading to mixed waste and lower recycling efficiency.
+          ScrapNet classifies waste images into categories to enable faster, scalable, and consistent sorting.
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        <div class="glass p-7 rounded-3xl border-r-4 border-emerald-400/50">
+          <h3 class="text-emerald-300 font-bold text-xs uppercase tracking-widest mb-2">Literature Review / Market Research</h3>
+          <p class="text-sm text-slate-500 italic">
+            Reviewed transfer-learning CNNs (ResNet/EfficientNet), waste classification pipelines, and lightweight deployment patterns for ML demos.
+          </p>
         </div>
-        <div class="hidden md:flex gap-8 text-[11px] uppercase tracking-widest font-bold opacity-70">
-            <a href="#problem" class="hover:text-emerald-300 transition">Problem</a>
-            <a href="#methodology" class="hover:text-emerald-300 transition">Methodology</a>
-            <a href="#results" class="hover:text-emerald-300 transition">Results</a>
-            <a href="#team" class="hover:text-emerald-300 transition">Team</a>
+
+        <div class="glass p-7 rounded-3xl border-r-4 border-lime-400/50">
+          <h3 class="text-lime-300 font-bold text-xs uppercase tracking-widest mb-2">Research Gap / Innovation</h3>
+          <p class="text-sm text-slate-500 italic">
+            Many solutions are heavy or not reproducible. ScrapNet focuses on a compact EfficientNet-B0 pipeline, portable artifact handling,
+            and a clean Streamlit demo + GitHub Pages presentation.
+          </p>
         </div>
-    </nav>
+      </div>
+    </section>
 
-    <main class="max-w-6xl mx-auto px-6 pt-48 pb-32 space-y-32">
-        
-        <section class="text-center">
-            <div class="inline-block px-4 py-1 border border-slate-800 rounded-full text-slate-500 text-[10px] font-mono mb-6 uppercase tracking-widest">ID: 23FE10CSE00078</div>
-            <h1 class="text-6xl md:text-7xl font-extrabold mb-8 uppercase leading-tight"><span class="gradient-text uppercase">ScrapNet – Waste Classification System</span></h1>
-            <p class="text-slate-400 max-w-2xl mx-auto italic text-lg leading-relaxed border-l-2 border-emerald-400/30 pl-6 text-left">
-                <span class="text-slate-200 font-semibold">AI-powered waste image classification</span> using <span class="text-slate-200 font-semibold">EfficientNet‑B0</span> and <span class="text-slate-200 font-semibold">PyTorch</span> to help automate waste segregation for smarter recycling.
-                <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="https://scrapnet-5zr4nm9mgrpdptppmejrtm.streamlit.app" target="_blank" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-lg transition">
-                        <i class="fas fa-play"></i> Open Live Demo
-                    </a>
-                    <a href="https://github.com/Bhavya-7-11/Scrapnet" target="_blank" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl border border-emerald-400/40 hover:border-emerald-300 text-slate-100 font-extrabold shadow-lg transition">
-                        <i class="fab fa-github"></i> View GitHub Repo
-                    </a>
-                </div>
-            </p>
-        </section>
+    <!-- METHODOLOGY -->
+    <section id="methodology" class="space-y-12">
+      <h2 class="text-4xl font-black text-center uppercase tracking-tight">
+        System <span class="text-emerald-400">Methodology</span>
+      </h2>
 
-        <section id="problem" class="grid md:grid-cols-2 gap-12 items-stretch">
-            <div class="glass p-10 rounded-[2.5rem] flex flex-col justify-center border-l-4 border-emerald-500">
-                <h2 class="text-3xl font-extrabold mb-6">Problem Statement</h2>
-                <p class="text-slate-400 leading-relaxed text-justify">Manual waste segregation is slow, inconsistent, and often leads to mixed waste—reducing recycling efficiency. ScrapNet automates waste categorization from images so sorting can be faster, more consistent, and scalable.</p>
-            </div>
-            <div class="space-y-6">
-                <div class="glass p-7 rounded-3xl border-r-4 border-emerald-400/50">
-                    <h3 class="text-emerald-300 font-bold text-xs uppercase tracking-widest mb-2">Literature Review / Market Research</h3>
-                    <p class="text-sm text-slate-500 italic">Reviewed transfer‑learning based CNNs (ResNet/EfficientNet), waste image classification approaches, and lightweight web deployment patterns for ML demos.</p>
-                </div>
-                <div class="glass p-7 rounded-3xl border-r-4 border-lime-400/50">
-                    <h3 class="text-lime-300 font-bold text-xs uppercase tracking-widest mb-2">Research Gap / Innovation</h3>
-                    <p class="text-sm text-slate-500 italic">Many solutions are heavy or not reproducible. ScrapNet focuses on a compact EfficientNet‑B0 pipeline, portable artifact loading, and a clean Streamlit UI + GitHub Pages presentation.</p>
-                </div>
-            </div>
-        </section>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="glass p-8 rounded-3xl text-center">
+          <i class="fas fa-database text-emerald-400 text-3xl mb-4"></i>
+          <h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Dataset / Input</h3>
+          <p class="text-sm text-slate-500">
+            Waste images across <b>7 classes</b> (cardboard, compost, glass, metal, paper, plastic, trash). Images resized to <b>224×224</b> and normalized.
+          </p>
+        </div>
 
-        <section id="methodology" class="space-y-12">
-            <h2 class="text-4xl font-black text-center uppercase tracking-tight">System <span class="text-emerald-400">Methodology</span></h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="glass p-8 rounded-3xl text-center">
-                    <i class="fas fa-database text-emerald-400 text-3xl mb-4"></i>
-                    <h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Dataset / Input</h3>
-                    <p class="text-sm text-slate-500">[Source, size, and preprocessing details]</p>
-                </div>
-                <div class="glass p-8 rounded-3xl text-center">
-                    <i class="fas fa-microchip text-purple-500 text-3xl mb-4"></i>
-                    <h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Model / Architecture</h3>
-                    <p class="text-sm text-slate-500">[Algorithms used or System Workflow]</p>
-                </div>
-                <div class="glass p-8 rounded-3xl text-center border-2 border-green-500/20 bg-green-500/5">
-                    <i class="fab fa-python text-green-500 text-3xl mb-4"></i>
-                    <h3 class="font-bold mb-4 uppercase text-xs tracking-widest text-green-400">Live Execution</h3>
-                    <a href="[LINK]" target="_blank" class="px-6 py-2 bg-green-600 rounded-full text-[10px] font-black hover:bg-green-500 transition shadow-lg shadow-green-900/40">VIEW CODE / DEMO</a>
-                </div>
-            </div>
-        </section>
+        <div class="glass p-8 rounded-3xl text-center">
+          <i class="fas fa-microchip text-purple-500 text-3xl mb-4"></i>
+          <h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Model / Architecture</h3>
+          <p class="text-sm text-slate-500">
+            EfficientNet-B0 pretrained on ImageNet, classifier head replaced for 7-class prediction, fine-tuned using cross-entropy loss.
+          </p>
+        </div>
 
-        <section id="results" class="glass p-12 rounded-[3.5rem] border-t-4 border-blue-500">
-            <h2 class="text-3xl font-black mb-12 text-center uppercase tracking-tight">Results & <span class="text-emerald-400">Analysis</span></h2>
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="grid md:grid-cols-3 gap-6">
-    <div class="glass p-4 rounded-3xl">
-        <p class="text-slate-300 text-xs uppercase tracking-widest font-bold mb-3">Accuracy Curve</p>
-        <img src="../artifacts/accuracy_curve.png" alt="Accuracy Curve" class="rounded-2xl w-full" />
-    </div>
-    <div class="glass p-4 rounded-3xl">
-        <p class="text-slate-300 text-xs uppercase tracking-widest font-bold mb-3">Loss Curve</p>
-        <img src="../artifacts/loss_curve.png" alt="Loss Curve" class="rounded-2xl w-full" />
-    </div>
-    <div class="glass p-4 rounded-3xl">
-        <p class="text-slate-300 text-xs uppercase tracking-widest font-bold mb-3">Confusion Matrix</p>
-        <img src="../artifacts/confusion_matrix_normalized.png" alt="Confusion Matrix" class="rounded-2xl w-full" />
-    </div>
-</div>
-<p class="mt-6 text-sm text-slate-500 italic">More plots are available in the <code>/artifacts</code> folder of the GitHub repository.</p>
-                <div class="space-y-6">
-                    <div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10 shadow-inner">
-                        <span class="text-slate-400 font-bold uppercase text-xs tracking-widest">Accuracy / Performance</span>
-                        <span class="text-emerald-300 font-mono font-black text-3xl">XX.X%</span>
-                    </div>
-                    <p class="text-slate-500 text-sm italic text-justify leading-relaxed">Quantifiable outcomes and evaluation metrics compared to baselines.</p>
-                </div>
-            </div>
-        </section>
+        <div class="glass p-8 rounded-3xl text-center border-2 border-green-500/20 bg-green-500/5">
+          <i class="fab fa-python text-green-500 text-3xl mb-4"></i>
+          <h3 class="font-bold mb-4 uppercase text-xs tracking-widest text-green-400">Live Execution</h3>
+          <a href="https://scrapnet-5zr4nm9mgrpdptppmejrtm.streamlit.app" target="_blank"
+             class="px-6 py-2 bg-green-600 rounded-full text-[10px] font-black hover:bg-green-500 transition shadow-lg shadow-green-900/40">
+            VIEW DEMO
+          </a>
+        </div>
+      </div>
+    </section>
 
-        <section id="team" class="text-center pt-10 border-t border-slate-900">
-            <h2 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] mb-12">Academic Credits</h2>
-            <div class="flex flex-wrap justify-center gap-10">
-                <div class="glass px-12 py-8 rounded-[2rem] border-b-4 border-emerald-500">
-                    <p class="text-[9px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Project Guide</p>
-                    <p class="font-black text-xl text-slate-100">[Guide Name]</p>
-                </div>
-                <div class="glass px-12 py-8 rounded-[2rem] border-b-4 border-slate-700">
-                    <p class="text-[9px] font-bold text-slate-400 mb-2 uppercase tracking-widest">Team Member 1</p>
-                    <p class="font-black text-xl text-slate-100">[Student Name]</p>
-                    <p class="text-[10px] text-slate-500 mt-1">[Reg No]</p>
-                </div>
-            </div>
-        </section>
-    </main>
+    <!-- RESULTS -->
+    <section id="results" class="space-y-8">
+      <h2 class="text-4xl font-black text-center uppercase tracking-tight">
+        RESULTS <span class="text-emerald-400">&</span> ANALYSIS
+      </h2>
 
-    <footer class="py-12 text-center bg-black/40 border-t border-slate-900">
-        <p class="text-slate-600 text-[10px] font-bold tracking-[0.3em] uppercase mb-2">Manipal University Jaipur</p>
-        <p class="text-slate-500 text-[9px] font-medium tracking-[0.2em] uppercase opacity-50">Department of Computer Science & Engineering • 2026</p>
-    </footer>
+      <div class="results-grid">
+        <a class="metric-card" href="assets/accuracy_curve.png" target="_blank">
+          <div class="metric-title">ACCURACY CURVE</div>
+          <div class="metric-sub">Train vs Val</div>
+        </a>
 
-    <script>
-        // TIMER LOGIC
-        let sec = 0;
-        let timer = null;
-        function startTimer() {
-            timer = setInterval(() => {
-                sec++;
-                let m = Math.floor(sec / 60);
-                let s = sec % 60;
-                document.getElementById('displayTime').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                
-                if (sec >= 480 && sec < 600) { // 8-10 Mins Warning
-                    document.getElementById('timerContainer').classList.add('timer-warning');
-                    document.getElementById('timerIcon').classList.replace('fa-hourglass-start', 'fa-hourglass-half');
-                } else if (sec >= 600) { // 10 Mins Stop
-                    clearInterval(timer);
-                    document.getElementById('timerContainer').classList.replace('timer-warning', 'timer-stop');
-                    document.getElementById('displayTime').innerText = "10:00";
-                    document.getElementById('timerIcon').classList.replace('fa-hourglass-half', 'fa-hourglass-end');
-                }
-            }, 1000);
+        <a class="metric-card" href="assets/loss_curve.png" target="_blank">
+          <div class="metric-title">LOSS CURVE</div>
+          <div class="metric-sub">Train vs Val</div>
+        </a>
+
+        <a class="metric-card" href="assets/confusion_matrix_normalized.png" target="_blank">
+          <div class="metric-title">CONFUSION MATRIX</div>
+          <div class="metric-sub">Normalized</div>
+        </a>
+
+        <div class="metric-summary">
+          <div class="summary-label">BEST VALIDATION ACCURACY</div>
+          <div class="summary-value">~82%</div>
+          <div class="summary-note">
+            The model generalizes reasonably well, but some classes overlap (notably plastic ↔ trash).
+            Check the confusion matrix + per-class F1 for the detailed story.
+          </div>
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="chip" href="assets/confusion_matrix_counts.png" target="_blank">Counts Matrix</a>
+            <a class="chip" href="assets/f1_scores.png" target="_blank">Per-class F1</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-preview">
+        <div class="preview-card">
+          <div class="preview-title">Quick Preview</div>
+          <img src="assets/accuracy_curve.png" alt="Accuracy vs Epochs" />
+        </div>
+        <div class="preview-card">
+          <div class="preview-title">Confusion Matrix (Normalized)</div>
+          <img src="assets/confusion_matrix_normalized.png" alt="Confusion Matrix Normalized" />
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM -->
+    <section id="team" class="text-center pt-10 border-t border-slate-900">
+      <h2 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] mb-12">Academic Credits</h2>
+
+      <div class="flex flex-wrap justify-center gap-10">
+        <div class="glass px-12 py-8 rounded-[2rem] border-b-4 border-emerald-500">
+          <p class="text-[9px] font-bold text-emerald-400 mb-2 uppercase tracking-widest">Student</p>
+          <p class="font-black text-xl text-slate-100">Mahesh Jangid</p>
+          <p class="text-[10px] text-slate-500 mt-1">23FE10CSE00078</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-12 text-center bg-black/40 border-t border-slate-900">
+    <p class="text-slate-600 text-[10px] font-bold tracking-[0.3em] uppercase mb-2">Manipal University Jaipur</p>
+    <p class="text-slate-500 text-[9px] font-medium tracking-[0.2em] uppercase opacity-50">Department of Computer Science & Engineering • 2026</p>
+  </footer>
+
+  <script>
+    // TIMER LOGIC
+    let sec = 0;
+    let timer = null;
+
+    function startTimer() {
+      timer = setInterval(() => {
+        sec++;
+        let m = Math.floor(sec / 60);
+        let s = sec % 60;
+        document.getElementById('displayTime').innerText =
+          `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+        if (sec >= 480 && sec < 600) {
+          document.getElementById('timerContainer').classList.add('timer-warning');
+          document.getElementById('timerIcon').classList.replace('fa-hourglass-start', 'fa-hourglass-half');
+        } else if (sec >= 600) {
+          clearInterval(timer);
+          document.getElementById('timerContainer').classList.replace('timer-warning', 'timer-stop');
+          document.getElementById('displayTime').innerText = "10:00";
+          document.getElementById('timerIcon').classList.replace('fa-hourglass-half', 'fa-hourglass-end');
         }
-
-        // RESULTS CHART (Demo Data)
-        const ctx = document.getElementById('resultsChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Existing System', 'Our Solution'],
-                datasets: [{
-                    data: [70, 92],
-                    backgroundColor: ['#1e293b', '#3b82f6'],
-                    borderRadius: 15,
-                    barThickness: 50
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { 
-                    y: { beginAtZero: true, grid: { color: '#ffffff05' }, ticks: { color: '#475569' } },
-                    x: { grid: { display: false }, ticks: { color: '#475569' } }
-                }
-            }
-        });
-    </script>
+      }, 1000);
+    }
+  </script>
 </body>
 </html>
