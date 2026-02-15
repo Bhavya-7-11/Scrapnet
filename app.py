@@ -95,7 +95,7 @@ with col1:
 
     if uploaded:
         img = Image.open(uploaded).convert("RGB")
-        st.image(img, caption="Uploaded image", use_container_width=True)
+        st.image(img, caption="Uploaded image")
 
     st.markdown("<div class='muted small'>Pro tip: Use well-lit, single-object images for higher confidence.</div>", unsafe_allow_html=True)
 
