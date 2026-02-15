@@ -1,57 +1,38 @@
 import streamlit as st
 from PIL import Image
 import numpy as np
-import pandas as pd
-from datetime import datetime
-
 from predict import load_model, predict_image
-
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="ScrapNet | Waste Classification",
-    page_icon="🌿",
-    layout="wide",
+    page_icon="♻️",
+    layout="wide"
 )
 
-# ---------------- GLOBAL STYLING ----------------
-st.markdown(
-    """
-    <style>
-      .block-container { padding-top: 1.2rem; padding-bottom: 2rem; }
-      .brand-title { font-size: 2.2rem; font-weight: 800; margin: 0; }
-      .brand-sub { color: #6b7280; margin-top: 0.25rem; }
-      .card {
-        background: rgba(16, 185, 129, 0.06);
-        border: 1px solid rgba(16, 185, 129, 0.18);
-        padding: 1rem 1.1rem;
-        border-radius: 14px;
-      }
-      .muted { color: #6b7280; }
-      .small { font-size: 0.9rem; }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# ---------------- SIDEBAR ----------------
-with st.sidebar:
-    st.markdown("## 🌿 ScrapNet")
-    st.markdown("<div class='muted small'>AI-powered waste classification</div>", unsafe_allow_html=True)
-    st.divider()
-
-    st.markdown("### Controls")
-    show_top3 = st.toggle("Show Top 3 Predictions", value=True)
-    show_probs = st.toggle("Show Probability Chart", value=True)
-    show_details = st.toggle("Show Model Details", value=True)
-
-    st.divider()
-
-    st.markdown("### Deployment")
-    st.write("Runtime: Streamlit Cloud")
-    st.write("Device: CPU")
-    st.caption("Tip: Try a clear waste photo for best results.")
-
+# ---------------- ECO THEME CSS ----------------
+st.markdown("""
+<style>
+.block-container {
+    padding-top: 2rem;
+}
+h1, h2, h3 {
+    color: #1B5E20;
+}
+.stButton>button {
+    background-color: #2E7D32;
+    color: white;
+    border-radius: 8px;
+    height: 3em;
+}
+.stButton>button:hover {
+    background-color: #1B5E20;
+}
+.sidebar .sidebar-content {
+    background-color: #E8F5E9;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------- LOAD MODEL ----------------
 @st.cache_resource
@@ -60,102 +41,77 @@ def get_model():
 
 model, classes = get_model()
 
+# ---------------- SIDEBAR ----------------
+st.sidebar.title("♻️ ScrapNet")
+st.sidebar.markdown("### Model Information")
 
-# ---------------- HEADER ----------------
-left, right = st.columns([3, 1])
-with left:
-    st.markdown("<p class='brand-title'>ScrapNet</p>", unsafe_allow_html=True)
-    st.markdown("<p class='brand-sub'>Waste Classification using EfficientNet-B0 (Transfer Learning)</p>", unsafe_allow_html=True)
+st.sidebar.markdown("""
+**Architecture:** EfficientNet-B0  
+**Framework:** PyTorch  
+**Image Size:** 224x224  
+**Classes:** {}  
+**Deployment:** Streamlit Cloud  
+""".format(len(classes)))
 
-with right:
-    st.markdown(
-        f"""
-        <div class="card">
-          <div class="muted small">Status</div>
-          <div style="font-weight:700;">🟢 Live</div>
-          <div class="muted small">Updated: {datetime.now().strftime("%d %b %Y")}</div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+st.sidebar.markdown("---")
+st.sidebar.markdown("### Training Details")
+st.sidebar.markdown("""
+- Transfer Learning  
+- Pretrained on ImageNet  
+- Fine-tuned classifier head  
+- Cross-Entropy Loss  
+""")
 
-st.divider()
+# ---------------- MAIN HEADER ----------------
+st.title("♻️ ScrapNet – Waste Classification System")
+st.markdown("A deep learning system for intelligent waste categorization using transfer learning.")
 
-# ---------------- MAIN LAYOUT ----------------
-col1, col2 = st.columns([1.05, 1.4], gap="large")
+# ---------------- MODEL DETAILS ----------------
+st.header("🔬 Model Architecture")
+
+st.markdown("""
+ScrapNet uses **EfficientNet-B0**, a state-of-the-art convolutional neural network
+known for its efficiency and performance.
+
+The classifier head was modified to match the number of waste categories,
+and the network was fine-tuned on a labeled waste dataset.
+""")
+
+# ---------------- PERFORMANCE SECTION ----------------
+st.header("📊 Model Performance")
+
+col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("📤 Upload an Image")
-
-    uploaded = st.file_uploader(
-        "Supported formats: JPG, JPEG, PNG, WEBP",
-        type=["jpg", "jpeg", "png", "webp"],
-        help="Upload a waste image (e.g., plastic bottle, paper, metal, trash)."
-    )
-
-    if uploaded:
-        img = Image.open(uploaded).convert("RGB")
-        st.image(img, caption="Uploaded image")
-
-    st.markdown("<div class='muted small'>Pro tip: Use well-lit, single-object images for higher confidence.</div>", unsafe_allow_html=True)
+    st.markdown("**Accuracy Curve**")
+    st.image("artifacts/accuracy_curve.png", use_container_width=True)
 
 with col2:
-    st.subheader("♻️ Prediction Results")
+    st.markdown("**Loss Curve**")
+    st.image("artifacts/loss_curve.png", use_container_width=True)
 
-    if uploaded:
-        label, conf, probs = predict_image(model, classes, img, device="cpu")
+st.markdown("**Confusion Matrix (Normalized)**")
+st.image("artifacts/confusion_matrix_normalized.png", use_container_width=True)
 
-        # KPIs
-        k1, k2, k3 = st.columns(3)
-        k1.metric("Predicted Class", label)
-        k2.metric("Confidence", f"{conf*100:.2f}%")
-        k3.metric("Model", "EfficientNet-B0")
+# ---------------- PREDICTION SECTION ----------------
+st.header("🧪 Run Inference")
 
-        st.write("**Confidence Meter**")
-        st.progress(min(max(conf, 0.0), 1.0))
+uploaded = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png", "webp"])
 
-        probs = np.array(probs)
+if uploaded:
+    img = Image.open(uploaded).convert("RGB")
+    st.image(img, caption="Uploaded image", use_container_width=True)
 
-        if show_top3:
-            st.subheader("Top-3 Predictions")
-            top_idx = np.argsort(probs)[::-1][:3]
+    label, conf, probs = predict_image(model, classes, img, device="cpu")
 
-            df = pd.DataFrame({
-                "Rank": [1, 2, 3],
-                "Class": [classes[i] for i in top_idx],
-                "Probability (%)": [round(float(probs[i]) * 100, 2) for i in top_idx],
-            })
+    st.subheader(f"Prediction: **{label}**")
+    st.write(f"Confidence: **{conf:.2%}**")
 
-            st.dataframe(df, use_container_width=True, hide_index=True)
-
-        if show_probs:
-            st.subheader("Full Probability Distribution")
-            chart_df = pd.DataFrame({"Probability": probs}, index=classes)
-            st.bar_chart(chart_df)
-
-        if show_details:
-            with st.expander("📌 Model Details / How it works", expanded=False):
-                st.markdown(
-                    """
-                    **Pipeline**
-                    1. Image resized to **224×224**
-                    2. Normalization using ImageNet mean/std
-                    3. EfficientNet-B0 backbone + custom classifier head
-                    4. Softmax → class probabilities
-                    
-                    **Notes**
-                    - Output is a prediction with confidence score.
-                    - Accuracy depends on dataset quality and real-world image conditions.
-                    """
-                )
-
-    else:
-        st.info("Upload an image to generate predictions.")
-
-st.divider()
+    topk = np.argsort(probs)[::-1][:3]
+    st.markdown("**Top 3 Predictions:**")
+    for i in topk:
+        st.write(f"- {classes[i]}: {probs[i]:.2%}")
 
 # ---------------- FOOTER ----------------
-st.caption(
-    "⚠️ Disclaimer: Predictions are generated by a trained ML model and may be incorrect for unclear/complex images. "
-    "ScrapNet is an educational project demo."
-)
+st.markdown("---")
+st.markdown("© 2026 ScrapNet | AI for Sustainable Waste Management 🌱")
