@@ -13,7 +13,7 @@ def artifact_path(filename: str) -> str:
 def show_artifact_image(filename: str, caption: str | None = None):
     path = artifact_path(filename)
     if os.path.exists(path):
-        st.image(path, caption=caption, use_container_width=True)
+        st.image(path, caption=caption)
     else:
         st.warning(f"Missing artifact: `{filename}` (expected at `{path}`)")
         
@@ -114,7 +114,7 @@ uploaded = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png", "webp
 
 if uploaded:
     img = Image.open(uploaded).convert("RGB")
-    st.image(img, caption="Uploaded image", use_container_width=True)
+    st.image(img, caption="Uploaded image")
 
     label, conf, probs = predict_image(model, classes, img, device="cpu")
 
