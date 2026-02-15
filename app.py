@@ -1,8 +1,22 @@
+import os
 import streamlit as st
 from PIL import Image
 import numpy as np
 from predict import load_model, predict_image
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ARTIFACTS_DIR = os.path.join(BASE_DIR, "artifacts")
+
+def artifact_path(filename: str) -> str:
+    return os.path.join(ARTIFACTS_DIR, filename)
+
+def show_artifact_image(filename: str, caption: str | None = None):
+    path = artifact_path(filename)
+    if os.path.exists(path):
+        st.image(path, caption=caption, use_container_width=True)
+    else:
+        st.warning(f"Missing artifact: `{filename}` (expected at `{path}`)")
+        
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="ScrapNet | Waste Classification",
@@ -84,14 +98,14 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("**Accuracy Curve**")
-    st.image("artifacts/accuracy_curve.png", use_container_width=True)
+    show_artifact_image("accuracy_curve.png")
 
 with col2:
     st.markdown("**Loss Curve**")
-    st.image("artifacts/loss_curve.png", use_container_width=True)
+    show_artifact_image("loss_curve.png")
 
 st.markdown("**Confusion Matrix (Normalized)**")
-st.image("artifacts/confusion_matrix_normalized.png", use_container_width=True)
+show_artifact_image("confusion_matrix_normalized.png")
 
 # ---------------- PREDICTION SECTION ----------------
 st.header("🧪 Run Inference")
