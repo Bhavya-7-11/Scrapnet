@@ -1,0 +1,8 @@
+streamlit==1.32.2
+numpy
+pillow
+matplotlib
+scikit-learn
+
+torch
+torchvision
