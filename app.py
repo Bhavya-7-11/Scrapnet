@@ -190,12 +190,13 @@ on a labelled waste dataset across **7 categories**.
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("**Accuracy Curve**")
-        show_img(exp_path("b0_aug", "accuracy_curve.png"))
+        show_img(ARTIFACTS_DIR / "accuracy_curve.png")
     with col2:
         st.markdown("**Loss Curve**")
-        show_img(exp_path("b0_aug", "loss_curve.png"))
+        show_img(ARTIFACTS_DIR / "loss_curve.png")
     st.markdown("**Confusion Matrix (Normalized)**")
-    show_img(exp_path("b0_aug", "confusion_matrix_normalized.png"))
+    show_img(ARTIFACTS_DIR / "confusion_matrix_normalized.png")
+
 
     st.header("🧪 Run Inference")
 
