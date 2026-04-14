@@ -4,7 +4,6 @@ pillow
 matplotlib
 scikit-learn
 pandas
-torch==2.2.2
-torchvision==0.17.2
---extra-index-url https://download.pytorch.org/whl/cpu
- 
+torch==2.9.1+cpu
+torchvision==0.20.1+cpu
+--index-url https://download.pytorch.org/whl/cpu
