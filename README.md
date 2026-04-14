@@ -2,10 +2,7 @@
 
 > Deep learning pipeline that classifies waste images into 7 categories using **Transfer Learning** (EfficientNet-B0/B3) and a **Custom CNN built from scratch** — deployed as a live Streamlit web application.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit-brightgreen?style=for-the-badge&logo=streamlit)](https://scrapnet-5zr4nm9mgrpdptppmejrtm.streamlit.app)
-[![GitHub Pages](https://img.shields.io/badge/Presentation-GitHub%20Pages-blue?style=for-the-badge&logo=github)](https://bhavya-7-11.github.io/Scrapnet/)
 
----
 
 ## 📌 Overview
 
