@@ -13,7 +13,7 @@ ScrapNet is a PBL (Project Based Learning) submission that investigates and comp
 | EfficientNet-B0 (no augmentation) | Transfer Learning | 224 × 224 |
 | EfficientNet-B0 (with augmentation) | Transfer Learning | 224 × 224 |
 | EfficientNet-B3 (with augmentation) | Transfer Learning | 300 × 300 |
-| **ScrapNetCNN** (from scratch) | Custom CNN | 224 × 224 |
+| **ScrapNetCNN**                     | Custom CNN | 224 × 224 |
 
 **Waste categories:** Cardboard · Glass · Metal · Paper · Plastic · Trash · Compost
 
