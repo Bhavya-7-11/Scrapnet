@@ -1,0 +1,18 @@
+{
+  "experiment": "custom_cnn_aug",
+  "model": "custom_cnn",
+  "augment": true,
+  "img_size": 224,
+  "best_val_acc": 0.4808,
+  "final_val_acc": 0.4527,
+  "mean_f1": 0.4963,
+  "per_class_f1": {
+    "cardboard": 0.6057,
+    "compost": 0.6544,
+    "glass": 0.5284,
+    "metal": 0.3425,
+    "paper": 0.4621,
+    "plastic": 0.5239,
+    "trash": 0.357
+  }
+}

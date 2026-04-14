@@ -1,0 +1,18 @@
+{
+  "experiment": "b3_aug",
+  "model": "b3",
+  "augment": true,
+  "img_size": 300,
+  "best_val_acc": 0.8563,
+  "final_val_acc": 0.8482,
+  "mean_f1": 0.8772,
+  "per_class_f1": {
+    "cardboard": 0.9036,
+    "compost": 0.9571,
+    "glass": 0.9397,
+    "metal": 0.8591,
+    "paper": 0.8738,
+    "plastic": 0.8161,
+    "trash": 0.7909
+  }
+}

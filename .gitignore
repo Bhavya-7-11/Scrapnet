@@ -31,6 +31,6 @@ build/
 .streamlit/secrets.toml
 
 
-experiments/
 master.zip
 *.key
+experiments/**/*.pth
