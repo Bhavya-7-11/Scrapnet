@@ -3,7 +3,7 @@ master/
 dataset/
 
 # Training outputs (too large, kept locally)
-experiments/
+#experiments/
 
 # Python
 venv/
